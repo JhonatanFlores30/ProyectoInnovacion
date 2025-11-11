@@ -16,6 +16,22 @@ Sistema web moderno de recompensas para aplicaciones de streaming mediante la vi
 npm install
 ```
 
+### Configuración de API de Películas (TMDB)
+
+El dashboard muestra películas reales usando The Movie Database (TMDB) API. Para habilitar esta funcionalidad:
+
+1. **Obtén una API Key gratuita:**
+   - Visita: https://www.themoviedb.org/settings/api
+   - Crea una cuenta (es gratis)
+   - Solicita una API Key
+
+2. **Configura la variable de entorno:**
+   - Crea un archivo `.env` en la raíz del proyecto
+   - Agrega: `VITE_TMDB_API_KEY=tu_api_key_aqui`
+   - Reinicia el servidor de desarrollo
+
+**Nota:** Si no configuras la API key, el sistema usará datos de ejemplo de películas populares.
+
 ### Librerías Adicionales Instaladas
 
 #### react-icons
@@ -32,6 +48,47 @@ import { MdEmail, MdLock } from 'react-icons/md'
 ```
 
 **Documentación:** [react-icons](https://react-icons.github.io/react-icons/)
+
+#### swiper
+Librería moderna de sliders/carruseles para React. Se instaló para crear el slider de ofertas destacadas.
+
+**Instalación:**
+```bash
+npm install swiper
+```
+
+**Uso:**
+```typescript
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+```
+
+**Documentación:** [swiper](https://swiperjs.com/)
+
+#### framer-motion
+Librería de animaciones para React. Se instaló para crear efectos visuales impresionantes en los eventos especiales.
+
+**Instalación:**
+```bash
+npm install framer-motion
+```
+
+**Uso:**
+```typescript
+import { motion } from 'framer-motion'
+
+<motion.div
+  animate={{ scale: [1, 1.2, 1] }}
+  transition={{ duration: 1.5, repeat: Infinity }}
+>
+  Contenido animado
+</motion.div>
+```
+
+**Documentación:** [framer-motion](https://www.framer.com/motion/)
 
 ##  Scripts Disponibles
 
@@ -74,17 +131,22 @@ src/
 │   ├── LoginPage.tsx
 │   └── DashboardPage.tsx
 ├── services/          # Servicios (API, autenticación)
-│   └── authService.ts
+│   ├── authService.ts
+│   └── movieService.ts  # Servicio para obtener películas de TMDB
 └── App.tsx            # Componente principal
 ```
 
 ##  Estado Actual
 
--  Login funcional con datos hardcodeados
--  Diseño moderno y responsivo
--  Preparado para conectar con base de datos
--  Backend y base de datos (próximamente)
--  Vinculación de cuentas de streaming (próximamente)
+-  ✅ Login funcional con datos hardcodeados
+-  ✅ Dashboard con tarjetas de películas
+-  ✅ Integración con TMDB API (opcional, con datos de ejemplo por defecto)
+-  ✅ Sistema de puntos y rachas
+-  ✅ Diseño moderno y responsivo
+-  ⏳ Preparado para conectar con base de datos
+-  ⏳ Backend y base de datos (próximamente)
+-  ⏳ Vinculación de cuentas de streaming (próximamente)
+-  ⏳ Preguntas después de ver películas (próximamente)
 
 ##  Notas
 

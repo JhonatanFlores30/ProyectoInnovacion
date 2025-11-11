@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Logo } from './Logo'
+import { LoginSplash } from './LoginSplash'
 import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService'
 import type { LoginCredentials } from '../services/authService'
@@ -18,7 +19,9 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
   })
   const [error, setError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
- const navigate = useNavigate();
+  const [showSplash, setShowSplash] = useState<boolean>(false)
+  const [loggedInUser, setLoggedInUser] = useState<{ id: string; email: string; name: string } | null>(null)
+  const navigate = useNavigate();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
@@ -29,13 +32,14 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
       
       if (result.success && result.user) {
         localStorage.setItem('user', JSON.stringify(result.user))
-        onLoginSuccess(result.user)
+        setLoggedInUser(result.user)
+        setShowSplash(true)
       } else {
         setError(result.error || 'Error al iniciar sesión')
+        setIsLoading(false)
       }
     } catch (err) {
       setError('Error de conexión. Por favor, intenta nuevamente.')
-    } finally {
       setIsLoading(false)
     }
   }
@@ -49,6 +53,17 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
     if (error) setError('')
   }
 
+  const handleSplashComplete = () => {
+    if (loggedInUser) {
+      onLoginSuccess(loggedInUser)
+    }
+  }
+
+  // Mostrar splash si el login fue exitoso
+  if (showSplash) {
+    return <LoginSplash onComplete={handleSplashComplete} />
+  }
+
   return (
     <div className="login-container">
       <div className="login-background">
@@ -60,7 +75,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
       <div className="login-wrapper">
         <div className="login-left">
           <div className="login-brand">
-            <Logo size="xlarge" />
+            <Logo size="large" />
             <h1 className="login-title">AURACOINS</h1>
             <p className="login-subtitle">
               Sistema de Recompensas para Streaming
