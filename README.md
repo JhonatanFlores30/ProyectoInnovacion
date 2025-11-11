@@ -1,73 +1,101 @@
-# React + TypeScript + Vite
+# AURACOINS - Sistema de Recompensas para Streaming
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema web moderno de recompensas para aplicaciones de streaming mediante la vinculación de cuentas. Actualmente soporta Netflix.
 
-Currently, two official plugins are available:
+##  Tecnologías
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend**: React 19.2.0 + TypeScript + Vite
+- **Backend**: Node.js (próximamente)
+- **Estilos**: CSS3 con efectos modernos (glassmorphism, gradientes animados)
+- **Iconos**: react-icons
 
-## React Compiler
+##  Instalación de Dependencias
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Dependencias Principales
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Librerías Adicionales Instaladas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+#### react-icons
+Librería de iconos para React. Se instaló para mejorar la UI del login.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Instalación:**
+```bash
+npm install react-icons
 ```
+
+**Uso:**
+```typescript
+import { MdEmail, MdLock } from 'react-icons/md'
+```
+
+**Documentación:** [react-icons](https://react-icons.github.io/react-icons/)
+
+##  Scripts Disponibles
+
+```bash
+# Desarrollo
+npm run dev
+
+# Build para producción
+npm run build
+
+# Preview del build
+npm run preview
+
+# Linting
+npm run lint
+```
+
+##  Características del Diseño
+
+- **Login Moderno**: Diseño responsivo con efectos de glassmorphism
+- **Logo Animado**: Logo AURACOINS con efectos de aura (azul/cian y naranja/rojo)
+- **Iconos**: Iconos Material Design para mejor UX
+- **Animaciones**: Efectos suaves y transiciones fluidas
+- **Responsive**: Adaptable a todos los tamaños de pantalla
+
+##  Credenciales de Prueba
+
+- **Admin**: `admin@auracoins.com` / `admin123`
+- **Usuario Demo**: `usuario@auracoins.com` / `demo123`
+
+##  Estructura del Proyecto
+
+```
+src/
+├── components/        # Componentes React
+│   ├── Login.tsx      # Componente de login
+│   ├── Logo.tsx       # Componente del logo
+│   └── ErrorBoundary.tsx
+├── pages/             # Páginas de la aplicación
+│   ├── LoginPage.tsx
+│   └── DashboardPage.tsx
+├── services/          # Servicios (API, autenticación)
+│   └── authService.ts
+└── App.tsx            # Componente principal
+```
+
+##  Estado Actual
+
+-  Login funcional con datos hardcodeados
+-  Diseño moderno y responsivo
+-  Preparado para conectar con base de datos
+-  Backend y base de datos (próximamente)
+-  Vinculación de cuentas de streaming (próximamente)
+
+##  Notas
+
+- Los datos de autenticación están hardcodeados temporalmente
+- El servicio de autenticación está preparado para conectar con una API/BD
+- El diseño es completamente responsivo y funciona en móviles, tablets y desktop
+
+##  Próximos Pasos
+
+1. Conectar con base de datos
+2. Implementar autenticación real con JWT
+3. Agregar vinculación de cuentas de streaming
+4. Sistema de puntos y recompensa
+5. Panel de administración
