@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Logo } from './Logo'
+import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService'
 import type { LoginCredentials } from '../services/authService'
 import { MdEmail, MdLock, MdPlayArrow, MdStars, MdCardGiftcard, MdPersonAdd, MdHelpOutline } from 'react-icons/md'
@@ -17,7 +18,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
   })
   const [error, setError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+ const navigate = useNavigate();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
@@ -189,7 +190,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
               <button
                 type="button"
                 className="register-button"
-                onClick={() => console.log('Registrarse')}
+                onClick={() => navigate("/registro")}
               >
                 <MdPersonAdd className="register-icon" />
                 Crear Cuenta

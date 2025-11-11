@@ -28,7 +28,6 @@ const HARDCODED_USERS: User[] = [
     password: 'demo123'
   }
 ];
-
 /**
  * Simula la autenticación de un usuario
  * En el futuro, esto hará una llamada a la API/BD

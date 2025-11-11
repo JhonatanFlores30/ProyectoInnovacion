@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { checkAuth } from './services/authService'
 import type { User } from './services/authService'
+
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { Registro } from './pages/Registro'
+
 import './App.css'
 
 function App() {
@@ -11,7 +15,6 @@ function App() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Verificar si hay una sesión activa al cargar la app
     const verifyAuth = async () => {
       try {
         const authenticatedUser = await checkAuth()
@@ -20,7 +23,6 @@ function App() {
       } catch (err) {
         console.error('Error verificando autenticación:', err)
         setError(err instanceof Error ? err.message : 'Error desconocido')
-        // Si hay error, asegurar que no hay usuario
         setUser(null)
       } finally {
         setIsCheckingAuth(false)
@@ -40,7 +42,7 @@ function App() {
     setError(null)
   }
 
-  // Mostrar spinner de carga solo brevemente mientras verifica
+  // 🌀 Mientras verifica la sesión
   if (isCheckingAuth) {
     return (
       <div className="loading-container">
@@ -49,19 +51,21 @@ function App() {
     )
   }
 
-  // Si hay un error crítico, mostrarlo
+  // ❌ Si hay un error crítico
   if (error && !user) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#0a0a0a',
-        color: '#fff',
-        padding: '2rem'
-      }}>
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#0a0a0a',
+          color: '#fff',
+          padding: '2rem'
+        }}
+      >
         <p style={{ color: '#ff6464', marginBottom: '1rem' }}>Error: {error}</p>
         <button
           onClick={() => window.location.reload()}
@@ -80,13 +84,45 @@ function App() {
     )
   }
 
-  // Si no hay usuario, mostrar la página de login (página inicial)
-  if (!user) {
-    return <LoginPage onLoginSuccess={handleLoginSuccess} />
-  }
+  // 🧭 Rutas principales
+  return (
+    <Router>
+      <Routes>
+        {/* Página de inicio (Login) */}
+        <Route
+          path="/"
+          element={
+            !user ? (
+              <LoginPage onLoginSuccess={handleLoginSuccess} />
+            ) : (
+              <Navigate to="/dashboard" replace />
+            )
+          }
+        />
 
-  // Si hay usuario autenticado, mostrar el dashboard
-  return <DashboardPage user={user} onLogout={handleLogout} />
+        {/* Página de registro */}
+        <Route
+          path="/registro"
+          element={!user ? <Registro /> : <Navigate to="/dashboard" replace />}
+        />
+
+        {/* Dashboard */}
+        <Route
+          path="/dashboard"
+          element={
+            user ? (
+              <DashboardPage user={user} onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
+        {/* Ruta por defecto (404 o redirección) */}
+        <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} replace />} />
+      </Routes>
+    </Router>
+  )
 }
 
 export default App
