@@ -6,6 +6,7 @@ import type { User } from './services/authService'
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Registro } from './pages/Registro'
+import {Password} from './pages/Password'
 
 import './App.css'
 
@@ -105,6 +106,12 @@ function App() {
           path="/registro"
           element={!user ? <Registro /> : <Navigate to="/dashboard" replace />}
         />
+
+        {/* Página de contraseña */}
+        <Route
+          path='/password'
+          element={<Password userEmail={user?.email || ''} />}
+        ></Route>
 
         {/* Dashboard */}
         <Route

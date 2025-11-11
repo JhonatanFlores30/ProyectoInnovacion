@@ -151,7 +151,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
                   <button
                     type="button"
                     className="forgot-password-link"
-                    onClick={() => console.log('Olvidar contraseña')}
+                    onClick={()  => navigate("/password")}
                   >
                     <MdHelpOutline className="forgot-icon" />
                     ¿Olvidaste tu contraseña?
