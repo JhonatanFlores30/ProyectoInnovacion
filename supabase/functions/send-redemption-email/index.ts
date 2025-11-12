@@ -1,10 +1,12 @@
 // Edge Function para enviar correo de confirmación de canje
 // Nota: Este archivo se ejecuta en Deno runtime en Supabase
 // Deno está disponible globalmente, no necesita declaración
-// @ts-ignore - Deno está disponible en Supabase Edge Functions
+// Los errores del linter sobre 'Deno' son normales y pueden ignorarse
 
 // Buscar la API key con ambos nombres posibles (singular y plural)
+// @ts-ignore - Deno está disponible en Supabase Edge Functions
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || Deno.env.get('RESEND_API_KEYS')
+// @ts-ignore - Deno está disponible en Supabase Edge Functions
 const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'onboarding@resend.dev'
 
 // ============================================
@@ -53,6 +55,7 @@ const corsHeaders = {
   'Access-Control-Max-Age': '86400',
 }
 
+// @ts-ignore - Deno está disponible en Supabase Edge Functions
 Deno.serve(async (req) => {
   // Manejar CORS preflight
   if (req.method === 'OPTIONS') {
