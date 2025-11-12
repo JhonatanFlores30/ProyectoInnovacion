@@ -44,13 +44,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem;
+  padding: 1.5rem 2rem;
   background: rgba(20, 20, 20, 0.9);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
+  min-height: 80px;
 }
 
 .app-header h1 {
@@ -140,9 +141,15 @@
 .app-main {
   flex: 1;
   padding: 2rem;
-  max-width: 1400px;
+  max-width: 1600px;
   width: 100%;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1.5rem 1rem;
+  }
 }
 
 /* Dashboard Layout */
@@ -169,6 +176,7 @@
   gap: 2.5rem;
 }
 
+
 /* Película Destacada - Oferta Especial */
 .featured-movie-card {
   width: 100%;
@@ -184,25 +192,24 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 280px;
+  min-height: 400px;
   display: flex;
   align-items: center;
-  padding: 1.5rem;
+  padding: 2rem 3rem;
 }
 
 .featured-movie-content {
   display: flex;
-  gap: 1.5rem;
+  gap: 2.5rem;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  align-items: center;
+  align-items: flex-start;
+  max-width: 100%;
 }
 
 .featured-movie-poster {
   position: relative;
   flex-shrink: 0;
-  width: 180px;
+  width: 240px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
@@ -215,24 +222,6 @@
   display: block;
 }
 
-.featured-badge {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(255, 100, 0, 0.95) 0%, rgba(255, 200, 0, 0.95) 100%);
-  border-radius: 12px;
-  color: #000;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 16px rgba(255, 100, 0, 0.4);
-  z-index: 2;
-}
 
 .featured-movie-info {
   flex: 1;
@@ -240,6 +229,9 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-width: 0;
+  padding-right: 1rem;
+  justify-content: space-between;
 }
 
 .featured-badge-text {
@@ -257,7 +249,7 @@
 }
 
 .featured-movie-title {
-  font-size: 1.75rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin: 0;
   background: linear-gradient(135deg, #00ffff 0%, #ff6400 100%);
@@ -268,64 +260,52 @@
 }
 
 .featured-movie-overview {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.9);
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
+  max-width: 100%;
 }
 
-.featured-reward-info {
-  margin: 1rem 0;
-}
-
-.reward-highlight {
-  display: flex;
+.featured-reward-compact {
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15) 0%, rgba(255, 100, 0, 0.15) 100%);
-  border: 2px solid rgba(0, 255, 255, 0.4);
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 255, 255, 0.2);
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 10px;
+  width: fit-content;
+  margin: 0.5rem 0;
 }
 
-.reward-icon-large {
-  font-size: 2.25rem;
+.reward-icon-compact {
+  font-size: 1.5rem;
   color: #00ffff;
   flex-shrink: 0;
 }
 
-.reward-highlight > div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.reward-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.reward-amount {
-  font-size: 1.5rem;
+.reward-amount-compact {
+  font-size: 1.25rem;
   font-weight: 700;
   color: #00ffff;
   line-height: 1;
+  white-space: nowrap;
 }
 
-.reward-note {
-  font-size: 0.85rem;
+.reward-note-compact {
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.6);
   font-style: italic;
+  margin-left: 0.5rem;
 }
 
 .featured-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-top: 1rem;
+  gap: 2rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .btn-featured-watch {
@@ -361,8 +341,88 @@
   background: rgba(0, 0, 0, 0.5);
   border-radius: 12px;
   color: #ff6400;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .featured-movie-backdrop {
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .featured-movie-content {
+    gap: 2rem;
+  }
+
+  .featured-movie-poster {
+    width: 200px;
+  }
+
+  .featured-movie-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-movie-backdrop {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .featured-movie-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .featured-movie-poster {
+    width: 180px;
+  }
+
+  .featured-movie-info {
+    padding-right: 0;
+    text-align: center;
+    align-items: center;
+  }
+
+  .featured-badge-text {
+    margin: 0 auto;
+  }
+
+  .featured-movie-title {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+
+  .featured-movie-overview {
+    text-align: center;
+  }
+
+  .featured-reward-compact {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0.5rem auto;
+  }
+
+  .reward-note-compact {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+
+  .featured-actions {
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-featured-watch {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Secciones */
@@ -371,11 +431,21 @@
   width: 100%;
 }
 
+.events-section {
+  margin-top: 1rem;
+}
+
+.offers-section {
+  margin-top: 1rem;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(0, 255, 255, 0.2);
 }
 
 .section-header h2 {
@@ -423,24 +493,37 @@
 .offers-swiper .swiper-button-next,
 .offers-swiper .swiper-button-prev {
   color: #00ffff;
-  background: rgba(0, 255, 255, 0.1);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 255, 255, 0.3);
+  background: transparent;
+  width: 48px;
+  height: 48px;
+  margin-top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   transition: all 0.3s ease;
+  opacity: 0.7;
 }
 
 .offers-swiper .swiper-button-next:hover,
 .offers-swiper .swiper-button-prev:hover {
-  background: rgba(0, 255, 255, 0.2);
-  border-color: rgba(0, 255, 255, 0.5);
+  opacity: 1;
+  color: #00ffff;
+  transform: translateY(-50%) scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.8));
 }
 
 .offers-swiper .swiper-button-next::after,
 .offers-swiper .swiper-button-prev::after {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.offers-swiper .swiper-button-next {
+  right: -10px;
+}
+
+.offers-swiper .swiper-button-prev {
+  left: -10px;
 }
 
 .offers-swiper .swiper-pagination-bullet {
@@ -588,9 +671,23 @@
 /* Grid de Eventos Destacados */
 .events-grid-featured {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .events-grid-featured {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .events-grid-featured {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 .event-card-featured {
@@ -733,7 +830,9 @@
 }
 
 .event-badge-featured {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.5rem 1.25rem;
   background: linear-gradient(135deg, rgba(0, 255, 255, 0.9) 0%, rgba(255, 100, 0, 0.9) 100%);
   border-radius: 20px;
@@ -744,6 +843,11 @@
   letter-spacing: 1px;
   box-shadow: 0 4px 16px rgba(0, 255, 255, 0.4);
   animation: badgePulse 2s ease-in-out infinite;
+}
+
+.event-badge-featured svg {
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 @keyframes badgePulse {
@@ -1097,6 +1201,77 @@
 
 .reward-icon {
   font-size: 1.25rem;
+}
+
+/* History Styles */
+.history-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #00ffff 0%, #ff6400 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.history-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.empty-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.empty-history p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.empty-subtitle {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.95rem !important;
+}
+
+.movie-badge.completed {
+  background: rgba(0, 255, 255, 0.9);
+  color: #000;
+  font-weight: 700;
+}
+
+.movie-reward.earned {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2) 0%, rgba(255, 100, 0, 0.2) 100%);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+}
+
+.movie-reward.earned .reward-amount {
+  font-weight: 700;
+  color: #00ffff;
+  font-size: 0.95rem;
+}
+
+.movie-answered-date {
+  margin: 0.5rem 0 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  font-style: italic;
 }
 
 .dashboard-card {

@@ -18,19 +18,39 @@ npm install
 
 ### Configuración de API de Películas (TMDB)
 
-El dashboard muestra películas reales usando The Movie Database (TMDB) API. Para habilitar esta funcionalidad:
+El dashboard muestra películas disponibles exclusivamente en **Netflix** usando TMDB (The Movie Database) API. Para habilitar esta funcionalidad:
 
 1. **Obtén una API Key gratuita:**
    - Visita: https://www.themoviedb.org/settings/api
-   - Crea una cuenta (es gratis)
-   - Solicita una API Key
+   - Crea una cuenta (es gratis y muy fácil)
+   - Solicita una API Key (se aprueba instantáneamente)
 
 2. **Configura la variable de entorno:**
-   - Crea un archivo `.env` en la raíz del proyecto
+   - Crea o edita el archivo `.env` en la raíz del proyecto
    - Agrega: `VITE_TMDB_API_KEY=tu_api_key_aqui`
    - Reinicia el servidor de desarrollo
 
-**Nota:** Si no configuras la API key, el sistema usará datos de ejemplo de películas populares.
+**Nota:** 
+- Si no configuras la API key, el sistema usará datos de ejemplo de películas populares.
+- El sistema está configurado para mostrar solo contenido disponible en Netflix.
+- Puedes cambiar la región por defecto (actualmente `MX`) editando `DEFAULT_REGION` en `src/services/movieService.ts`.
+- TMDB es más confiable y tiene mejor documentación que otras APIs.
+
+### Configuración de Envío de Correos
+
+El sistema envía correos de confirmación automáticamente cuando un usuario canjea puntos por recompensas. Para habilitar esta funcionalidad:
+
+1. **Lee la guía completa:** Consulta `EMAIL_SETUP_GUIDE.md` para instrucciones detalladas
+2. **Resumen rápido:**
+   - Crea una cuenta en [Resend](https://resend.com) (gratis)
+   - Obtén tu API Key
+   - Despliega la Edge Function `send-redemption-email`
+   - Configura los secretos en Supabase: `RESEND_API_KEY` y `RESEND_FROM_EMAIL`
+
+**Nota:**
+- El envío de correo es opcional y no bloquea el proceso de canje si falla
+- El plan gratuito de Resend permite 3,000 correos/mes
+- Para desarrollo puedes usar `onboarding@resend.dev` sin verificar dominio
 
 ### Librerías Adicionales Instaladas
 
@@ -132,19 +152,20 @@ src/
 │   └── DashboardPage.tsx
 ├── services/          # Servicios (API, autenticación)
 │   ├── authService.ts
-│   └── movieService.ts  # Servicio para obtener películas de TMDB
+│   └── movieService.ts  # Servicio para obtener películas de Netflix (Watchmode API)
 └── App.tsx            # Componente principal
 ```
 
 ##  Estado Actual
 
--  ✅ Login funcional con datos hardcodeados
+-  ✅ Login funcional con Supabase Auth
 -  ✅ Dashboard con tarjetas de películas
--  ✅ Integración con TMDB API (opcional, con datos de ejemplo por defecto)
--  ✅ Sistema de puntos y rachas
+-  ✅ Integración con TMDB API para mostrar contenido de Netflix
+-  ✅ Sistema de puntos (AuraCoins) y rachas
+-  ✅ Sistema de recompensas y canjes
+-  ✅ Envío de correos de confirmación de canje
 -  ✅ Diseño moderno y responsivo
--  ⏳ Preparado para conectar con base de datos
--  ⏳ Backend y base de datos (próximamente)
+-  ✅ Base de datos con Supabase
 -  ⏳ Vinculación de cuentas de streaming (próximamente)
 -  ⏳ Preguntas después de ver películas (próximamente)
 

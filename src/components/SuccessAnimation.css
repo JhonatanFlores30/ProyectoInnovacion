@@ -1,0 +1,295 @@
+.success-animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.success-animation-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.success-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    #0a0a0a 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #0f3460 75%,
+    #0a0a0a 100%
+  );
+  animation: background-fade 2.5s ease-in-out;
+}
+
+@keyframes background-fade {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.success-animation-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.success-animation-content.visible {
+  opacity: 1;
+  transform: scale(1);
+  animation: success-splash-animation 2.5s ease-in-out;
+}
+
+@keyframes success-splash-animation {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1.1) translateY(0);
+  }
+  30% {
+    transform: scale(1) translateY(0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  85% {
+    opacity: 0.8;
+    transform: scale(0.95) translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+}
+
+.success-logo {
+  animation: logo-glow-pulse 2.5s ease-in-out;
+}
+
+@keyframes logo-glow-pulse {
+  0% {
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+  }
+  20% {
+    filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8))
+            drop-shadow(0 0 60px rgba(0, 255, 255, 0.6))
+            drop-shadow(0 0 80px rgba(255, 100, 0, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 50px rgba(212, 175, 55, 1))
+            drop-shadow(0 0 80px rgba(0, 255, 255, 0.8))
+            drop-shadow(0 0 100px rgba(255, 100, 0, 0.7));
+  }
+  80% {
+    filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.6));
+  }
+  100% {
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+  }
+}
+
+.success-checkmark {
+  font-size: 5rem;
+  color: #00ffff;
+  filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8))
+          drop-shadow(0 0 60px rgba(0, 255, 255, 0.6));
+  animation: checkmarkPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s both;
+  position: relative;
+  z-index: 2;
+  margin-top: -1rem;
+}
+
+@keyframes checkmarkPop {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.success-message {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  background: linear-gradient(135deg, #00ffff 0%, #ff6400 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  animation: messageFadeIn 0.8s ease 0.8s both;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes messageFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #00ffff, #ff6400);
+  border-radius: 2px;
+  opacity: 0;
+  animation: confettiFall 2s ease forwards;
+}
+
+.confetti:nth-child(odd) {
+  background: linear-gradient(135deg, #ff6400, #00ffff);
+  border-radius: 50%;
+}
+
+.confetti-0 { left: 10%; animation-delay: 0s; }
+.confetti-1 { left: 20%; animation-delay: 0.1s; }
+.confetti-2 { left: 30%; animation-delay: 0.2s; }
+.confetti-3 { left: 40%; animation-delay: 0.3s; }
+.confetti-4 { left: 50%; animation-delay: 0.4s; }
+.confetti-5 { left: 60%; animation-delay: 0.5s; }
+.confetti-6 { left: 70%; animation-delay: 0.6s; }
+.confetti-7 { left: 80%; animation-delay: 0.7s; }
+.confetti-8 { left: 90%; animation-delay: 0.8s; }
+.confetti-9 { left: 15%; animation-delay: 0.15s; }
+.confetti-10 { left: 25%; animation-delay: 0.25s; }
+.confetti-11 { left: 35%; animation-delay: 0.35s; }
+.confetti-12 { left: 45%; animation-delay: 0.45s; }
+.confetti-13 { left: 55%; animation-delay: 0.55s; }
+.confetti-14 { left: 65%; animation-delay: 0.65s; }
+.confetti-15 { left: 75%; animation-delay: 0.75s; }
+.confetti-16 { left: 85%; animation-delay: 0.85s; }
+.confetti-17 { left: 95%; animation-delay: 0.95s; }
+.confetti-18 { left: 5%; animation-delay: 0.05s; }
+.confetti-19 { left: 50%; animation-delay: 0.5s; }
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translateY(-100px) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg);
+  }
+}
+
+.success-animation-content::before,
+.success-animation-content::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.2) 0%,
+    transparent 70%
+  );
+  animation: particle-float 2.5s ease-in-out;
+  pointer-events: none;
+}
+
+.success-animation-content::before {
+  top: -100px;
+  left: -100px;
+  animation-delay: 0.2s;
+}
+
+.success-animation-content::after {
+  bottom: -100px;
+  right: -100px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 100, 0, 0.2) 0%,
+    transparent 70%
+  );
+  animation-delay: 0.4s;
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  30% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  70% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@media (max-width: 768px) {
+  .success-checkmark {
+    font-size: 4rem;
+  }
+
+  .success-message {
+    font-size: 1.2rem;
+  }
+}
+

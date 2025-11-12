@@ -1,37 +1,65 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEmail, MdLock, MdPersonAdd, MdPlayArrow } from "react-icons/md";
+import { register } from "../services/authService";
+import { SuccessAnimation } from "../components/SuccessAnimation";
 import "./Registro.css";
 
 export const Registro = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMensaje("");
+    setIsLoading(true);
 
     if (!email || !password) {
       setMensaje("Completa todos los campos");
+      setIsLoading(false);
       return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem("usuarios") || "[]");
-    if (storedUsers.find((u: { email: string }) => u.email === email)) {
-      setMensaje("El usuario ya existe");
+    if (password.length < 6) {
+      setMensaje("La contraseña debe tener al menos 6 caracteres");
+      setIsLoading(false);
       return;
     }
 
-    storedUsers.push({ email, password });
-    localStorage.setItem("usuarios", JSON.stringify(storedUsers));
+    try {
+      const result = await register({
+        email,
+        password,
+        name: name || undefined
+      });
 
-    setMensaje("Cuenta creada exitosamente ✅");
-    setTimeout(() => navigate("/"), 1500);
+      if (result.success) {
+        setShowSuccessAnimation(true);
+        setMensaje("Cuenta creada exitosamente ✅");
+      } else {
+        setMensaje(result.error || "Error al crear la cuenta");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error en registro:", error);
+      setMensaje("Error al crear la cuenta. Intenta de nuevo.");
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="registro-container">
+    <>
+      <SuccessAnimation
+        show={showSuccessAnimation}
+        message="¡Cuenta creada exitosamente!"
+        onComplete={() => navigate("/")}
+      />
+      <div className="registro-container">
         <div className="registro-background">
           <div className="gradient-orb orb-1"></div>
           <div className="gradient-orb orb-2"></div>
@@ -81,6 +109,7 @@ export const Registro = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </label>
 
@@ -88,15 +117,28 @@ export const Registro = () => {
               <MdLock className="input-icon" />
               <input
                 type="password"
-                placeholder="••••••••"
+                placeholder="•••••••• (mínimo 6 caracteres)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={6}
+                disabled={isLoading}
               />
             </label>
 
-            <button type="submit" className="btn-registrar">
-              <MdPersonAdd /> Registrarse
+            <label>
+              <MdPersonAdd className="input-icon" />
+              <input
+                type="text"
+                placeholder="Nombre (opcional)"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={isLoading}
+              />
+            </label>
+
+            <button type="submit" className="btn-registrar" disabled={isLoading}>
+              <MdPersonAdd /> {isLoading ? "Registrando..." : "Registrarse"}
             </button>
 
             {mensaje && <p className="mensaje">{mensaje}</p>}
@@ -109,5 +151,6 @@ export const Registro = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

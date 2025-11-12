@@ -36,7 +36,7 @@ export const Sidebar = ({ onLogout, activeSection = 'dashboard', onSectionChange
 
   const menuItems = [
     { id: 'dashboard', icon: MdDashboard, label: 'Dashboard' },
-    { id: 'peliculas', icon: MdLocalMovies, label: 'Películas' },
+    { id: 'peliculas', icon: MdLocalMovies, label: 'Historial' },
     { id: 'recompensas', icon: MdStars, label: 'Recompensas' },
     { id: 'perfil', icon: MdAccountCircle, label: 'Perfil' },
     { id: 'configuracion', icon: MdSettings, label: 'Configuración' },

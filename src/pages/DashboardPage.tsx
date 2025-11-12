@@ -3,7 +3,13 @@ import { logout } from '../services/authService'
 import type { User } from '../services/authService'
 import { Sidebar } from '../components/Sidebar'
 import { PeliculasPage } from './PeliculasPage'
+import { RecompensasPage } from './RecompensasPage'
 import { getPopularMovies, getMovieImageUrl, getMovieBackdropUrl, type Movie } from '../services/movieService'
+import { getRewards, type Reward } from '../services/rewardService'
+import { getUserProfile, type UserProfile } from '../services/profileService'
+import { redeemReward } from '../services/redemptionService'
+import { RedemptionConfirmModal } from '../components/RedemptionConfirmModal'
+import { RedemptionCodeModal } from '../components/RedemptionCodeModal'
 import { 
   MdStars, 
   MdEvent,
@@ -13,7 +19,6 @@ import {
   MdTrendingUp,
   MdPlayArrow,
   MdTimer,
-  MdRocketLaunch,
   MdEmojiEvents
 } from 'react-icons/md'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -32,54 +37,264 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false)
   
-  // Estado del usuario (en el futuro vendrá de la BD)
-  const [balance, setBalance] = useState(() => {
-    const stored = localStorage.getItem(`balance_${user.id}`)
-    return stored ? parseInt(stored) : 0
-  })
-  
-  const [streak, setStreak] = useState(() => {
-    const stored = localStorage.getItem(`streak_${user.id}`)
-    return stored ? parseInt(stored) : 0
-  })
+  // Estado del perfil del usuario desde Supabase
+  const [profile, setProfile] = useState<UserProfile | null>(null)
 
   // Película destacada para la oferta especial
   const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null)
+  const [daysRemaining, setDaysRemaining] = useState<number>(7)
 
-  useEffect(() => {
-    localStorage.setItem(`balance_${user.id}`, balance.toString())
-  }, [balance, user.id])
+  // Recompensas destacadas (con badge)
+  const [featuredRewards, setFeaturedRewards] = useState<Reward[]>([])
 
-  useEffect(() => {
-    localStorage.setItem(`streak_${user.id}`, streak.toString())
-  }, [streak, user.id])
+  // Estados para modales de canje en Dashboard
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [rewardToRedeem, setRewardToRedeem] = useState<Reward | null>(null)
+  const [isRedeeming, setIsRedeeming] = useState(false)
+  const [showCodeModal, setShowCodeModal] = useState(false)
+  const [redemptionCode, setRedemptionCode] = useState('')
 
-  // Cargar película destacada
+  // Cargar perfil del usuario desde Supabase
   useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const userProfile = await getUserProfile(user.id)
+        if (userProfile) {
+          setProfile(userProfile)
+        } else {
+          // Si no existe el perfil, crear uno con valores por defecto
+          console.warn('No se encontró perfil, usando valores por defecto')
+          setProfile({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            balance: 0,
+            streak: 0,
+            longest_streak: 0,
+            level: 1,
+            experience_points: 0,
+            total_points_earned: 0,
+            last_activity_date: null,
+          })
+        }
+      } catch (error) {
+        console.error('Error cargando perfil:', error)
+        // Usar valores por defecto en caso de error
+        setProfile({
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          balance: 0,
+          streak: 0,
+          longest_streak: 0,
+          level: 1,
+          experience_points: 0,
+          total_points_earned: 0,
+          last_activity_date: null,
+        })
+      }
+    }
+
+    if (user.id) {
+      loadProfile()
+    }
+  }, [user.id, user.email, user.name])
+
+  // Recargar perfil cuando cambie la sección activa (para actualizar balance después de canjes)
+  useEffect(() => {
+    if (activeSection === 'recompensas' && user.id) {
+      const reloadProfile = async () => {
+        const userProfile = await getUserProfile(user.id)
+        if (userProfile) {
+          setProfile(userProfile)
+        }
+      }
+      reloadProfile()
+    }
+  }, [activeSection, user.id])
+
+  // Cargar película destacada (aleatoria, cambia cada 7 días)
+  useEffect(() => {
+    // Solo ejecutar si user.id está disponible
+    const userId = user?.id
+    if (!userId) {
+      return
+    }
+
     const loadFeaturedMovie = async () => {
       try {
         const movies = await getPopularMovies()
         if (movies.length > 0) {
-          // Seleccionar la primera película popular como destacada
-          setFeaturedMovie(movies[0])
+          const storageKey = `featured_movie_${userId}`
+          const storedData = localStorage.getItem(storageKey)
+          
+          let selectedMovie: Movie | null = null
+          let shouldUpdate = false
+          
+          if (storedData) {
+            try {
+              const { movie, date } = JSON.parse(storedData)
+              const storedDate = new Date(date)
+              const now = new Date()
+              const daysDiff = Math.floor((now.getTime() - storedDate.getTime()) / (1000 * 60 * 60 * 24))
+              
+              // Si han pasado 7 días o más, seleccionar una nueva película
+              if (daysDiff >= 7) {
+                shouldUpdate = true
+                if (import.meta.env.DEV) {
+                  console.log(`🔄 Han pasado ${daysDiff} días, seleccionando nueva película de la semana...`)
+                }
+              } else {
+                // Usar la película guardada si aún no han pasado 7 días
+                selectedMovie = movie
+                const daysRemainingCalc = 7 - daysDiff
+                setDaysRemaining(daysRemainingCalc)
+                if (import.meta.env.DEV) {
+                  console.log(`📅 Película de la semana actual (${daysRemainingCalc} días restantes):`, movie.title)
+                }
+              }
+            } catch (error) {
+              // Si hay error al parsear, seleccionar nueva película
+              shouldUpdate = true
+            }
+          } else {
+            // No hay película guardada, seleccionar una nueva
+            shouldUpdate = true
+          }
+          
+          // Seleccionar una película aleatoria si es necesario
+          if (shouldUpdate || !selectedMovie) {
+            const randomIndex = Math.floor(Math.random() * movies.length)
+            selectedMovie = movies[randomIndex]
+            
+            // Guardar la película seleccionada con la fecha actual
+            localStorage.setItem(storageKey, JSON.stringify({
+              movie: selectedMovie,
+              date: new Date().toISOString()
+            }))
+            
+            // Resetear días restantes a 7 cuando se selecciona una nueva película
+            setDaysRemaining(7)
+            
+            if (import.meta.env.DEV) {
+              console.log('🎲 Nueva película de la semana seleccionada (aleatoria):', selectedMovie.title)
+            }
+          }
+          
+          setFeaturedMovie(selectedMovie)
         }
       } catch (error) {
         console.error('Error cargando película destacada:', error)
       }
     }
     loadFeaturedMovie()
+  }, [user?.id ?? '']) // Usar valor por defecto para mantener el tamaño del array constante
+
+  // Cargar recompensas destacadas
+  useEffect(() => {
+    const loadFeaturedRewards = async () => {
+      try {
+        const allRewards = await getRewards()
+        // Obtener solo las recompensas que tienen badge (POPULAR u OFERTA)
+        const featured = allRewards.filter(reward => reward.badge)
+        setFeaturedRewards(featured)
+      } catch (error) {
+        console.error('Error cargando recompensas destacadas:', error)
+      }
+    }
+    loadFeaturedRewards()
   }, [])
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     onLogout()
+  }
+
+  const handleRedeemReward = async (reward: { price: number; name: string }) => {
+    // Buscar la recompensa completa para mostrar el modal
+    const fullReward = featuredRewards.find(r => r.name === reward.name)
+    if (fullReward) {
+      setRewardToRedeem(fullReward)
+      setShowConfirmModal(true)
+    }
+  }
+
+  const handleConfirmRedeem = async () => {
+    if (!rewardToRedeem || !user.id) {
+      alert('Error: No se pudo obtener la información necesaria')
+      return
+    }
+
+    setIsRedeeming(true)
+
+    try {
+      const rewardId = parseInt(rewardToRedeem.id, 10)
+      if (isNaN(rewardId)) {
+        alert('Error: ID de recompensa inválido')
+        setIsRedeeming(false)
+        return
+      }
+
+      const result = await redeemReward(
+        user.id,
+        rewardId,
+        rewardToRedeem.price,
+        rewardToRedeem.cashback
+      )
+
+      if (result.success && result.redemptionCode) {
+        setShowConfirmModal(false)
+        setRedemptionCode(result.redemptionCode)
+        setShowCodeModal(true)
+        
+        // Actualizar perfil
+        const updatedProfile = await getUserProfile(user.id)
+        if (updatedProfile) {
+          setProfile(updatedProfile)
+        }
+      } else {
+        alert(`Error al canjear: ${result.error || 'Error desconocido'}`)
+      }
+    } catch (error) {
+      console.error('Error en canje:', error)
+      alert('Error inesperado al procesar el canje')
+    } finally {
+      setIsRedeeming(false)
+      setRewardToRedeem(null)
+    }
+  }
+
+  const handleCloseConfirmModal = () => {
+    setShowConfirmModal(false)
+    setRewardToRedeem(null)
+    setIsRedeeming(false)
+  }
+
+  const handleCloseCodeModal = () => {
+    setShowCodeModal(false)
+    setRedemptionCode('')
   }
 
   // Renderizar contenido según la sección activa
   const renderContent = () => {
     switch (activeSection) {
       case 'peliculas':
-        return <PeliculasPage streak={streak} />
+        return <PeliculasPage user={user} isHistory={true} />
+      
+      case 'recompensas':
+        return (
+          <RecompensasPage 
+            userBalance={profile?.balance || 0}
+            userId={user.id}
+            onRedeem={handleRedeemReward}
+            onBalanceUpdate={async () => {
+              const updatedProfile = await getUserProfile(user.id)
+              if (updatedProfile) {
+                setProfile(updatedProfile)
+              }
+            }}
+          />
+        )
       
       case 'dashboard':
       default:
@@ -100,10 +315,6 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
                         src={getMovieImageUrl(featuredMovie.poster_path)} 
                         alt={featuredMovie.title}
                       />
-                      <div className="featured-badge">
-                        <MdStars />
-                        <span>OFERTA ESPECIAL</span>
-                      </div>
                     </div>
                     <div className="featured-movie-info">
                       <div className="featured-badge-text">
@@ -116,17 +327,12 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
                           ? `${featuredMovie.overview.substring(0, 200)}...` 
                           : featuredMovie.overview}
                       </p>
-                      <div className="featured-reward-info">
-                        <div className="reward-highlight">
-                          <MdStars className="reward-icon-large" />
-                          <div>
-                            <span className="reward-label">Gana puntos extra</span>
-                            <span className="reward-amount">
-                              {(10 + streak) * 2} AURACOINS
-                            </span>
-                            <span className="reward-note">(Doble puntos por ver y responder)</span>
-                          </div>
-                        </div>
+                      <div className="featured-reward-compact">
+                        <MdStars className="reward-icon-compact" />
+                        <span className="reward-amount-compact">
+                          {(10 + (profile?.streak || 0)) * 2} AURACOINS
+                        </span>
+                        <span className="reward-note-compact">(Doble puntos por ver y responder)</span>
                       </div>
                       <div className="featured-actions">
                         <button className="btn-featured-watch">
@@ -135,7 +341,7 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
                         </button>
                         <div className="featured-timer">
                           <MdTimer />
-                          <span>Oferta válida hasta: 3 días</span>
+                          <span>Oferta válida hasta: {daysRemaining} {daysRemaining === 1 ? 'día' : 'días'}</span>
                         </div>
                       </div>
                     </div>
@@ -254,7 +460,10 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
                     >
                       <MdStars />
                     </motion.div>
-                    <div className="event-badge-featured">🎁 BIENVENIDA</div>
+                    <div className="event-badge-featured">
+                      <MdCardGiftcard />
+                      BIENVENIDA
+                    </div>
                     <h3 className="event-title-featured">Primera Vez</h3>
                     <p className="event-description-featured">
                       Responde tu primera pregunta y recibe un bono de bienvenida especial
@@ -283,7 +492,12 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
                   <MdWhatshot className="section-icon" />
                   Ofertas Destacadas
                 </h2>
-                <button className="btn-see-all">Ver todas →</button>
+                <button 
+                  className="btn-see-all"
+                  onClick={() => setActiveSection('recompensas')}
+                >
+                  Ver todas →
+                </button>
               </div>
               
               <div className="offers-slider-container">
@@ -310,55 +524,39 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
                   }}
                   className="offers-swiper"
                 >
-                  <SwiperSlide>
-                    <div className="offer-card featured">
-                      <div className="offer-badge">POPULAR</div>
-                      <div className="offer-content">
-                        <h3>Netflix - 1 Mes</h3>
-                        <p className="offer-description">
-                          Suscripción mensual completa de Netflix. Disfruta de todo el catálogo sin límites.
-                        </p>
-                        <div className="offer-price">
-                          <span className="price-label">Desde</span>
-                          <span className="price-amount">500</span>
-                          <span className="price-currency">AURACOINS</span>
+                  {featuredRewards.map((reward) => (
+                    <SwiperSlide key={reward.id}>
+                      <div className={`offer-card ${reward.badge?.toLowerCase() === 'popular' ? 'featured' : ''}`}>
+                        {reward.badge && (
+                          <div className="offer-badge">{reward.badge}</div>
+                        )}
+                        <div className="offer-content">
+                          <h3>{reward.name}</h3>
+                          <p className="offer-description">
+                            {reward.description}
+                          </p>
+                          <div className="offer-price">
+                            <span className="price-label">Desde</span>
+                            <span className="price-amount">{reward.price.toLocaleString()}</span>
+                            <span className="price-currency">AURACOINS</span>
+                          </div>
+                          {reward.cashback && (
+                            <div className="offer-cashback">
+                              <MdStars />
+                              <span>{reward.cashback}% Cashback</span>
+                            </div>
+                          )}
+                          <button 
+                            className="btn-offer"
+                            onClick={() => handleRedeemReward({ price: reward.price, name: reward.name })}
+                          >
+                            <MdCardGiftcard />
+                            Canjear Ahora
+                          </button>
                         </div>
-                        <div className="offer-cashback">
-                          <MdStars />
-                          <span>11% Cashback</span>
-                        </div>
-                        <button className="btn-offer">
-                          <MdCardGiftcard />
-                          Canjear Ahora
-                        </button>
                       </div>
-                    </div>
-                  </SwiperSlide>
-
-                  <SwiperSlide>
-                    <div className="offer-card">
-                      <div className="offer-badge">OFERTA</div>
-                      <div className="offer-content">
-                        <h3>Netflix - 3 Meses</h3>
-                        <p className="offer-description">
-                          Suscripción trimestral de Netflix. Ahorra más con esta oferta especial.
-                        </p>
-                        <div className="offer-price">
-                          <span className="price-label">Desde</span>
-                          <span className="price-amount">1400</span>
-                          <span className="price-currency">AURACOINS</span>
-                        </div>
-                        <div className="offer-cashback">
-                          <MdStars />
-                          <span>15% Cashback</span>
-                        </div>
-                        <button className="btn-offer">
-                          <MdCardGiftcard />
-                          Canjear
-                        </button>
-                      </div>
-                    </div>
-                  </SwiperSlide>
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </div>
             </section>
@@ -386,6 +584,28 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
           {renderContent()}
         </main>
       </div>
+
+      {/* Modal de Confirmación de Canje (Dashboard) */}
+      <RedemptionConfirmModal
+        reward={rewardToRedeem}
+        userBalance={profile?.balance || 0}
+        isOpen={showConfirmModal}
+        onClose={handleCloseConfirmModal}
+        onConfirm={handleConfirmRedeem}
+        isLoading={isRedeeming}
+      />
+
+      {/* Modal de Código de Canje (Dashboard) */}
+      <RedemptionCodeModal
+        isOpen={showCodeModal}
+        rewardName={rewardToRedeem?.name || ''}
+        redemptionCode={redemptionCode}
+        cashbackAmount={rewardToRedeem?.cashback 
+          ? Math.floor(rewardToRedeem.price * (rewardToRedeem.cashback / 100))
+          : undefined
+        }
+        onClose={handleCloseCodeModal}
+      />
     </div>
   )
 }

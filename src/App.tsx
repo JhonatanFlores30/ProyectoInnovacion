@@ -7,6 +7,7 @@ import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Registro } from './pages/Registro'
 import {Password} from './pages/Password'
+import { LogoutAnimation } from './components/LogoutAnimation'
 
 import './App.css'
 
@@ -14,6 +15,7 @@ function App() {
   const [user, setUser] = useState<User | null>(null)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showLogoutAnimation, setShowLogoutAnimation] = useState(false)
 
   useEffect(() => {
     const verifyAuth = async () => {
@@ -38,9 +40,32 @@ function App() {
     setError(null)
   }
 
-  const handleLogout = () => {
-    setUser(null)
-    setError(null)
+  const handleLogout = async () => {
+    setShowLogoutAnimation(true)
+    
+    // Ejecutar el logout inmediatamente mientras se muestra la animación
+    const { logout } = await import('./services/authService')
+    try {
+      // Ejecutar el logout y esperar a que se complete
+      await logout()
+      
+      // Esperar un momento adicional para asegurar que Supabase procese el logout
+      await new Promise(resolve => setTimeout(resolve, 300))
+      
+      // Limpiar el estado del usuario DESPUÉS de que el logout se complete
+      setUser(null)
+      setError(null)
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+      // Aún así, limpiar el estado en caso de error
+      setUser(null)
+      setError(null)
+    }
+  }
+
+  const handleLogoutComplete = () => {
+    // Solo ocultar la animación cuando termine
+    setShowLogoutAnimation(false)
   }
 
   // 🌀 Mientras verifica la sesión
@@ -87,7 +112,12 @@ function App() {
 
   // 🧭 Rutas principales
   return (
-    <Router>
+    <>
+      <LogoutAnimation
+        show={showLogoutAnimation}
+        onComplete={handleLogoutComplete}
+      />
+      <Router>
       <Routes>
         {/* Página de inicio (Login) */}
         <Route
@@ -110,7 +140,7 @@ function App() {
         {/* Página de contraseña */}
         <Route
           path='/password'
-          element={<Password userEmail={user?.email || ''} />}
+          element={<Password />}
         ></Route>
 
         {/* Dashboard */}
@@ -129,6 +159,7 @@ function App() {
         <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} replace />} />
       </Routes>
     </Router>
+    </>
   )
 }
 
