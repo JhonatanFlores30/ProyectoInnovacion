@@ -25,9 +25,7 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-/* =====================================================
-   AVATAR
-===================================================== */
+
 .perfil-header {
   display: flex;
   align-items: center;
@@ -47,6 +45,8 @@
   box-shadow: 0 0 25px #00eaffaa;
   animation: avatarGlow 3s infinite ease-in-out;
 }
+
+
 
 @keyframes avatarGlow {
   0% { box-shadow: 0 0 16px #00eaff55; }
@@ -80,9 +80,6 @@
   display: none;
 }
 
-/* =====================================================
-   NOMBRE
-===================================================== */
 .perfil-name {
   font-size: 3rem;
   background: linear-gradient(90deg, #00eaff, #ff9100);
@@ -91,9 +88,6 @@
   font-weight: 800;
 }
 
-/* =====================================================
-   INPUTS
-===================================================== */
 .perfil-input {
   padding: 10px;
   width: 220px;
@@ -105,9 +99,7 @@
   font-size: 1rem;
 }
 
-/* =====================================================
-   BOTÓN BASE — AURACOINS PREMIUM
-===================================================== */
+
 .perfil-button {
   position: relative;
   padding: 12px 26px;
@@ -119,26 +111,25 @@
   color: #eaffff;
   letter-spacing: 0.5px;
 
-  /* Fondo y glass */
+
   background: linear-gradient(135deg, rgba(0, 234, 255, 0.18), rgba(0, 128, 190, 0.18));
   backdrop-filter: blur(6px);
 
-  /* Borde suave */
   border: 1px solid rgba(0, 255, 255, 0.35);
 
-  /* Sombras */
+
   box-shadow: 
     inset 0 0 12px rgba(0, 255, 255, 0.15),
     0 0 18px rgba(0, 255, 255, 0.25),
     0 0 35px rgba(0, 255, 255, 0.05);
 
-  /* Glow del texto */
+
   text-shadow: 0 0 5px #00eaff99;
 
   transition: 0.25s ease;
 }
 
-/* Hover – Energía neón + efecto 3D */
+
 .perfil-button:hover {
   transform: translateY(-4px) scale(1.06);
   background: linear-gradient(135deg, #00eaff88, #008cffbb);
@@ -150,7 +141,7 @@
   border-color: #00eaff;
 }
 
-/* Click */
+
 .perfil-button:active {
   transform: scale(0.92);
   box-shadow: 0 0 20px #00eaffaa;
@@ -257,9 +248,7 @@
   opacity: 0.9;
 }
 
-/* =====================================================
-   TARJETA INFORMACIÓN
-===================================================== */
+
 .perfil-info-card {
   margin-top: 30px;
   padding: 30px;
@@ -285,9 +274,7 @@
   100% { text-shadow: 0 0 14px #00eaffcc; }
 }
 
-/* =====================================================
-   STATS (RACHAS, COINS, ETC)
-===================================================== */
+
 .perfil-stats-grid {
   margin-top: 30px;
   display: grid;
@@ -321,7 +308,7 @@
   100% { text-shadow: 0 0 15px #00eaffff; }
 }
 
-/* Rachas fuego */
+
 .perfil-stat.streak:hover {
   border-color: #ff7a00;
   box-shadow: 0 0 40px #ff7a00cc;
@@ -336,4 +323,18 @@
 @keyframes firePulse {
   0% { text-shadow: 0 0 6px #ff7a00; }
   100% { text-shadow: 0 0 20px #ffd966; }
+}
+
+.stat-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.stat-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px #ff7a00);
 }

@@ -3,6 +3,7 @@ import { getUserProfile, updateUserProfile } from "../services/profileService"
 import type { UserProfile } from "../services/profileService"
 import "./PerfilPage.css"
 import { motion } from "framer-motion"
+import { FaEdit } from "react-icons/fa"
 
 interface PerfilPageProps {
   userId: string
@@ -22,6 +23,7 @@ export const PerfilPage = ({ userId }: PerfilPageProps) => {
     loadProfile()
   }, [userId])
 
+  
   const handleSaveName = async () => {
     if (!newName.trim()) return
 
@@ -74,8 +76,12 @@ export const PerfilPage = ({ userId }: PerfilPageProps) => {
             />
 
             <label className="perfil-avatar-edit">
-              {uploading ? "Subiendo..." : "Cambiar Foto"}
-              <input type="file" accept="image/*" onChange={handleImageUpload} />
+            {uploading ? (
+                "Subiendo..."
+            ) : (
+                <FaEdit size={16} />
+            )}
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
             </label>
           </div>
 
@@ -135,17 +141,26 @@ export const PerfilPage = ({ userId }: PerfilPageProps) => {
 
           <div className="perfil-stat">
             <h4>Racha Actual</h4>
-            <p>{profile.streak} 🔥</p>
+                <p className="stat-with-icon">
+                {profile.streak}
+                <img src="/Logo/Logoo.png" alt="fuego" className="stat-icon" />
+                </p>
           </div>
 
           <div className="perfil-stat">
             <h4>Racha Máxima</h4>
-            <p>{profile.longest_streak} 🔥</p>
+                <p className="stat-with-icon">
+                {profile.longest_streak}
+                <img src="/Logo/Logoo.png" alt="fuego" className="stat-icon" />
+                </p>
           </div>
 
           <div className="perfil-stat">
             <h4>AURA COINS</h4>
-            <p>{profile.total_points_earned}</p>
+            <p className="stat-with-icon">
+            {profile.total_points_earned}
+            <img src="/Logo/Logoo.png" alt="fuego" className="stat-icon" />
+            </p>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-// Servicio para manejar el perfil del usuario (balance, avatar, streak, etc.)
+
 import { supabase } from "../lib/supabase"
 
 export interface UserProfile {
@@ -15,9 +15,7 @@ export interface UserProfile {
   last_activity_date: string | null
 }
 
-/**
- * Obtener perfil de usuario desde Supabase
- */
+
 export const getUserProfile = async (userId: string): Promise<UserProfile | null> => {
   try {
     const { data, error } = await supabase
@@ -54,9 +52,7 @@ export const getUserProfile = async (userId: string): Promise<UserProfile | null
   }
 }
 
-/**
- * Actualizar perfil completo (nombre, avatar, etc.)
- */
+
 export const updateUserProfile = async (
   userId: string,
   updates: Partial<UserProfile>
@@ -79,9 +75,7 @@ export const updateUserProfile = async (
   }
 }
 
-/**
- * Actualizar balance
- */
+
 export const updateBalance = async (userId: string, newBalance: number) => {
   try {
     const { error } = await supabase
@@ -97,9 +91,7 @@ export const updateBalance = async (userId: string, newBalance: number) => {
   }
 }
 
-/**
- * Sumar AuraCoins
- */
+
 export const addBalance = async (userId: string, amount: number, description?: string) => {
   try {
     const profile = await getUserProfile(userId)
@@ -132,9 +124,7 @@ export const addBalance = async (userId: string, amount: number, description?: s
   }
 }
 
-/**
- * Restar AuraCoins
- */
+
 export const subtractBalance = async (userId: string, amount: number, description?: string) => {
   try {
     const profile = await getUserProfile(userId)
@@ -163,9 +153,7 @@ export const subtractBalance = async (userId: string, amount: number, descriptio
   }
 }
 
-/**
- * Actualizar última actividad
- */
+
 export const updateLastActivity = async (userId: string) => {
   try {
     const today = new Date().toISOString().split("T")[0]
