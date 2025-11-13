@@ -1,0 +1,339 @@
+
+.perfil-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+  background: #0b0b0b;
+}
+
+
+.perfil-card {
+  width: 100%;
+  max-width: 1600px;
+  background: #0d0d0d;
+  padding: 35px;
+  border-radius: 22px;
+  border: 2px solid #00eaff55;
+  box-shadow: 0 0 25px #00eaff22;
+  color: white;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* =====================================================
+   AVATAR
+===================================================== */
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.perfil-avatar-container {
+  position: relative;
+}
+
+.perfil-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid #00eaff;
+  object-fit: cover;
+  box-shadow: 0 0 25px #00eaffaa;
+  animation: avatarGlow 3s infinite ease-in-out;
+}
+
+@keyframes avatarGlow {
+  0% { box-shadow: 0 0 16px #00eaff55; }
+  50% { box-shadow: 0 0 30px #00eaffbb; }
+  100% { box-shadow: 0 0 16px #00eaff55; }
+}
+
+.perfil-avatar-edit {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #00eaffaa;
+  color: #001e27;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  border: 0.5px solid #00eaff88;
+  transition: 0.25s ease;
+}
+
+.perfil-avatar-edit:hover {
+  transform: translateX(-50%) scale(1.08);
+  background: #00eaff;
+  box-shadow: 0 0 18px #00eaffaa;
+}
+
+.perfil-avatar-edit input {
+  display: none;
+}
+
+/* =====================================================
+   NOMBRE
+===================================================== */
+.perfil-name {
+  font-size: 3rem;
+  background: linear-gradient(90deg, #00eaff, #ff9100);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 800;
+}
+
+/* =====================================================
+   INPUTS
+===================================================== */
+.perfil-input {
+  padding: 10px;
+  width: 220px;
+  background: #121212;
+  border: 1px solid #00eaff66;
+  border-radius: 10px;
+  color: white;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* =====================================================
+   BOTÓN BASE — AURACOINS PREMIUM
+===================================================== */
+.perfil-button {
+  position: relative;
+  padding: 12px 26px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #eaffff;
+  letter-spacing: 0.5px;
+
+  /* Fondo y glass */
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.18), rgba(0, 128, 190, 0.18));
+  backdrop-filter: blur(6px);
+
+  /* Borde suave */
+  border: 1px solid rgba(0, 255, 255, 0.35);
+
+  /* Sombras */
+  box-shadow: 
+    inset 0 0 12px rgba(0, 255, 255, 0.15),
+    0 0 18px rgba(0, 255, 255, 0.25),
+    0 0 35px rgba(0, 255, 255, 0.05);
+
+  /* Glow del texto */
+  text-shadow: 0 0 5px #00eaff99;
+
+  transition: 0.25s ease;
+}
+
+/* Hover – Energía neón + efecto 3D */
+.perfil-button:hover {
+  transform: translateY(-4px) scale(1.06);
+  background: linear-gradient(135deg, #00eaff88, #008cffbb);
+  box-shadow:
+    inset 0 0 15px rgba(255, 255, 255, 0.12),
+    0 0 25px #00eaffbb,
+    0 0 50px #0077ffaa,
+    0 0 70px rgba(0, 200, 255, 0.4);
+  border-color: #00eaff;
+}
+
+/* Click */
+.perfil-button:active {
+  transform: scale(0.92);
+  box-shadow: 0 0 20px #00eaffaa;
+}
+
+
+.perfil-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    #00eaff,
+    #0077ff,
+    #00c3ff,
+    #00eaff
+  );
+  background-size: 300% 300%;
+  animation: pulseBorder 4s infinite ease;
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes pulseBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+.perfil-btn-edit {
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.3), rgba(0, 110, 175, 0.25));
+  border-color: rgba(0, 255, 255, 0.4);
+}
+
+.perfil-btn-edit:hover {
+  background: linear-gradient(135deg, #00eaffdd, #0099ffcc);
+}
+
+
+.perfil-btn-save {
+  background: linear-gradient(135deg, rgba(0, 255, 170, 0.3), rgba(0, 190, 130, 0.35));
+  border-color: rgba(0, 255, 160, 0.5);
+  text-shadow: 0 0 5px #00ffcc99;
+}
+
+.perfil-btn-save:hover {
+  background: linear-gradient(135deg, #00ffccdd, #00cc88cc);
+  box-shadow: 0 0 25px #00ffccaa;
+}
+
+.perfil-btn-cancel {
+  background: linear-gradient(135deg, rgba(255, 120, 0, 0.35), rgba(150, 45, 0, 0.3));
+  border-color: rgba(255, 140, 0, 0.55);
+  text-shadow: 0 0 5px #ff8e00aa;
+}
+
+.perfil-btn-cancel:hover {
+  background: linear-gradient(135deg, #ff8e00ee, #cc5500ee);
+  box-shadow: 0 0 28px #ff8e00cc;
+}
+
+.perfil-level-card {
+  margin-top: 30px;
+  background: #111;
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid #00eaff44;
+  transition: 0.25s ease;
+}
+
+.perfil-level-card:hover {
+  transform: translateY(-6px);
+  border-color: #00eaff;
+  box-shadow: 0 0 30px #00eaff55;
+}
+
+.perfil-xp-bar {
+  width: 100%;
+  height: 18px;
+  background: #1c1c1c;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+  border: 1px solid #00eaff55;
+}
+
+.perfil-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00eaff, #ff9100);
+  transition: width 0.5s ease;
+}
+
+.perfil-xp-text {
+  text-align: center;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* =====================================================
+   TARJETA INFORMACIÓN
+===================================================== */
+.perfil-info-card {
+  margin-top: 30px;
+  padding: 30px;
+  background: #111;
+  border-radius: 14px;
+  border: 1px solid #00eaff44;
+  transition: 0.25s ease;
+}
+
+.perfil-info-card:hover {
+  transform: translateY(-6px);
+  border-color: #00eaff;
+  box-shadow: 0 0 30px #00eaff55;
+}
+
+.perfil-info-card:hover h3,
+.perfil-info-card:hover p {
+  animation: infoPulse 1.2s infinite alternate;
+}
+
+@keyframes infoPulse {
+  0% { text-shadow: 0 0 4px #00eaff55; }
+  100% { text-shadow: 0 0 14px #00eaffcc; }
+}
+
+/* =====================================================
+   STATS (RACHAS, COINS, ETC)
+===================================================== */
+.perfil-stats-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.perfil-stat {
+  background: #111;
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid #00eaff55;
+  box-shadow: 0 0 12px #00eaff22;
+  text-align: center;
+  font-size: 1.5rem;
+  transition: 0.25s ease;
+}
+
+.perfil-stat:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: #00eaff;
+  box-shadow: 0 0 35px #00eaffaa;
+}
+
+.perfil-stat:hover p {
+  animation: pulseStat 1.2s infinite alternate;
+}
+
+@keyframes pulseStat {
+  0% { text-shadow: 0 0 5px #00eaffaa; }
+  100% { text-shadow: 0 0 15px #00eaffff; }
+}
+
+/* Rachas fuego */
+.perfil-stat.streak:hover {
+  border-color: #ff7a00;
+  box-shadow: 0 0 40px #ff7a00cc;
+  background: #1a0f00;
+}
+
+.perfil-stat.streak:hover p {
+  color: #ffae00;
+  animation: firePulse 0.9s infinite alternate;
+}
+
+@keyframes firePulse {
+  0% { text-shadow: 0 0 6px #ff7a00; }
+  100% { text-shadow: 0 0 20px #ffd966; }
+}
