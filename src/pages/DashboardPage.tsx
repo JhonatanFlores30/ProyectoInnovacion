@@ -5,6 +5,7 @@ import { Sidebar } from '../components/Sidebar'
 import { PeliculasPage } from './PeliculasPage'
 import { RecompensasPage } from './RecompensasPage'
 import { PerfilPage } from './PerfilPage'
+import SettingsPage from './SettingsPage'
 import { getPopularMovies, getMovieImageUrl, getMovieBackdropUrl, type Movie } from '../services/movieService'
 import { getRewards, type Reward } from '../services/rewardService'
 import { getUserProfile, type UserProfile } from '../services/profileService'
@@ -298,6 +299,9 @@ export const DashboardPage = ({ user, onLogout }: DashboardPageProps) => {
         )
       case 'perfil':
       return <PerfilPage userId={user.id} /> 
+
+      case 'configuracion':
+      return <SettingsPage userId={user.id} /> 
       
       case 'dashboard':
       default:

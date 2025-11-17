@@ -1,0 +1,395 @@
+/* ================================
+   ✨ CONTENEDOR GENERAL
+================================ */
+.configuracion-container {
+  width: 100%;
+  padding: 2rem 3rem;
+  color: #e0e0e0;
+  animation: fadeIn 0.4s ease;
+}
+
+.config-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 234, 255, 0.7);
+}
+
+/* ================================
+   ✨ TARJETAS AURACOINS – Glass + Neon
+================================ */
+.config-card {
+  background: rgba(15, 15, 20, 0.75);
+  padding: 2rem;
+  border-radius: 18px;
+  margin-bottom: 2rem;
+
+  /* Borde azul neon */
+  border: 1px solid rgba(0, 234, 255, 0.5);
+
+  /* Glow suave */
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.15);
+
+  backdrop-filter: blur(10px);
+
+  transition: all 0.25s ease;
+  transform: translateY(0px);
+
+  /* Hover efecto premium */
+  cursor: pointer;
+}
+
+.config-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 
+    0 0 30px rgba(0, 234, 255, 0.45),
+    0 0 60px rgba(0, 234, 255, 0.25);
+  border-color: #00eaff;
+}
+
+.config-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: white;
+  text-shadow: 0 0 6px rgba(0, 234, 255, 0.6);
+}
+
+/* ================================
+   ✨ LISTA DE PLATAFORMAS
+================================ */
+.cuentas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cuenta-item {
+  background: rgba(20, 20, 25, 0.8);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.1);
+
+  transition: 0.25s ease;
+}
+
+.cuenta-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 25px rgba(0, 234, 255, 0.35);
+  border-color: #00eaff;
+}
+
+.cuenta-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-react {
+  width: 35px;
+  transition: 0.3s ease;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+}
+
+.cuenta-item:hover .icon-react {
+  transform: scale(1.15);
+}
+
+/* BOTONES */
+.vincular,
+.desvincular {
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.vincular {
+  background: #00eaff;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+}
+
+.vincular:hover {
+  background: #14ffec;
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.8);
+}
+
+.desvincular {
+  background: #ff4747;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 71, 71, 0.5);
+}
+
+.desvincular:hover {
+  background: #ff6b6b;
+  box-shadow: 0 0 20px rgba(255, 100, 100, 0.8);
+}
+
+/* LISTAS DE SOPORTE Y LEGAL */
+.support-list {
+  list-style: none;
+  padding: 0;
+}
+
+.support-list li {
+  padding: 0.4rem 0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.support-list li:hover {
+  color: #00eaff;
+  text-shadow: 0 0 6px rgba(0, 234, 255, 0.8);
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ANIMACIONES POR PLATAFORMA */
+.plataforma-netflix {
+  border-color: red !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5) !important;
+}
+.plataforma-netflix:hover {
+  box-shadow: 0 0 35px red !important;
+}
+
+.plataforma-playstation {
+  border-color: #0053ff !important;
+  box-shadow: 0 0 15px rgba(0, 83, 255, 0.5) !important;
+}
+.plataforma-playstation:hover {
+  box-shadow: 0 0 35px #006cff !important;
+}
+
+.plataforma-xbox {
+  border-color: #00ff00 !important;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5) !important;
+}
+.plataforma-xbox:hover {
+  box-shadow: 0 0 35px #00ff00 !important;
+}
+
+.plataforma-playstore {
+  border-color: #a8e063 !important;
+  box-shadow: 0 0 15px rgba(168, 224, 99, 0.5) !important;
+}
+.plataforma-playstore:hover {
+  box-shadow: 0 0 35px #a8e063 !important;
+}
+
+.plataforma-steam {
+  border-color: #00eaff !important;
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.6) !important;
+}
+.plataforma-steam:hover {
+  box-shadow: 0 0 35px #00eaff !important;
+}
+
+/* Header con botón */
+.config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ==========================
+        MODAL
+========================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 8, 12, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.25s ease;
+  z-index: 9999;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-card {
+  background: #0d1016;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 360px;
+  text-align: center;
+  animation: modalPop 0.35s ease;
+  border: 2px solid #00eaff;
+  box-shadow: 0 0 25px rgba(0, 234, 255, 0.3);
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* GLOW DEL MODAL */
+.modal-netflix { border-color: #e50914; box-shadow: 0 0 35px #e50914; }
+.modal-playstore { border-color: #34a853; box-shadow: 0 0 35px #34a853; }
+.modal-xbox { border-color: #0fbd33; box-shadow: 0 0 35px #0fbd33; }
+.modal-playstation { border-color: #0053ff; box-shadow: 0 0 35px #0053ff; }
+.modal-steam { border-color: #00eaff; box-shadow: 0 0 35px #00eaff; }
+
+.modal-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+}
+
+.modal-title {
+  font-size: 1.6rem;
+  color: #00eaff;
+  text-shadow: 0 0 10px rgba(0,234,255,0.9);
+  margin-bottom: 0.5rem;
+}
+
+.modal-message {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #d6f9ff;
+}
+
+.modal-button {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  background: #00eaff;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(0,234,255,0.7);
+  transition: 0.25s;
+}
+
+.modal-button:hover {
+  background: #12fff2;
+  box-shadow: 0 0 30px rgba(0,234,255,1);
+}
+
+/* ACCORDION */
+
+.accordion-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.accordion-item {
+  margin-bottom: 1rem;
+}
+
+.accordion-title {
+  font-size: 1.15rem;
+  cursor: pointer;
+  padding: 0.7rem 0.5rem;
+  border-radius: 10px;
+  color: #dff9ff;
+  transition: 0.25s ease;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.accordion-title:hover {
+  color: #00eaff;
+  text-shadow: 0 0 10px rgba(0, 234, 255, 0.7);
+}
+
+.accordion-content-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    max-height 0.35s ease,
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.accordion-content-wrapper.open {
+  max-height: 900px; /* suficientemente grande */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.accordion-content {
+  margin-top: 0.6rem;
+  padding: 1.5rem 1.8rem;
+
+  background: #0d1117;
+  border: 1px solid #00eaff;
+  border-radius: 12px;
+
+  box-shadow: 0 0 18px rgba(0, 234, 255, 0.25);
+  color: #d2faff;
+  line-height: 1.6;
+
+  animation: fadeInSmooth 0.35s ease;
+}
+
+/* Fade suave del contenido */
+@keyframes fadeInSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.accordion-content h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #00eaff;
+  text-shadow: 0 0 8px rgba(0, 234, 255, 0.4);
+}
+
+.accordion-content p {
+  margin-bottom: 1rem;
+  font-size: 0.97rem;
+}
+
+
+.accordion-content ul {
+  padding-left: 1.6rem;
+  margin-bottom: 1.4rem;
+}
+
+.accordion-content ul li {
+  margin-bottom: 0.6rem;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+/* Bullet neon personalizado */
+.accordion-content ul li::marker {
+  color: #00eaff;
+}
