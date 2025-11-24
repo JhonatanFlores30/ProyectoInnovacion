@@ -4,12 +4,13 @@ import { Logo } from './Logo'
 import { LoginSplash } from './LoginSplash'
 import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService'
-import type { LoginCredentials } from '../services/authService'
+import { supabase } from '../lib/supabase'
+import type { LoginCredentials, User } from '../services/authService'
 import { MdEmail, MdLock, MdPlayArrow, MdStars, MdCardGiftcard, MdPersonAdd, MdHelpOutline } from 'react-icons/md'
 import './Login.css'
 
 interface LoginProps {
-  onLoginSuccess: (user: { id: string; email: string; name: string }) => void
+  onLoginSuccess: (user: User) => void  
 }
 
 export const Login = ({ onLoginSuccess }: LoginProps) => {
@@ -20,8 +21,11 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
   const [error, setError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showSplash, setShowSplash] = useState<boolean>(false)
-  const [loggedInUser, setLoggedInUser] = useState<{ id: string; email: string; name: string } | null>(null)
+
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
+
   const navigate = useNavigate();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
@@ -31,8 +35,18 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
       const result = await login(credentials)
       
       if (result.success && result.user) {
+
+        // refrescar sesión
+        await supabase.auth.getSession();
+
+        // Guardar usuario completo (incluye app_role)
         localStorage.setItem('user', JSON.stringify(result.user))
         setLoggedInUser(result.user)
+
+        console.log("🔵 SESSION DESPUÉS DEL LOGIN:", 
+          JSON.stringify(await supabase.auth.getSession(), null, 2)
+        );
+
         setShowSplash(true)
       } else {
         setError(result.error || 'Error al iniciar sesión')
@@ -55,7 +69,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
 
   const handleSplashComplete = () => {
     if (loggedInUser) {
-      onLoginSuccess(loggedInUser)
+      onLoginSuccess(loggedInUser) // ← ahora pasa app_role correctamente
     }
   }
 
@@ -217,4 +231,3 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
     </div>
   )
 }
-
